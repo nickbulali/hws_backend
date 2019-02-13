@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\SignupActivate;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use Redirect;
+use Response;
 
 class APIController extends Controller
 {
@@ -21,9 +24,16 @@ class APIController extends Controller
             'name' => request('name'),
             'email' => request('email'),
             'password' => bcrypt(request('password')),
+            'activation_token' => str_random(60)
         ]);
 
-        return response($user->jsonSerialize(), Response::HTTP_CREATED);
+        $user->notify(new SignupActivate($user));
+
+        return response()->json([
+            'message' => 'Account created',
+            'user' => $user,
+            'status' => 200,
+        ]);
     }
 
     public function login()
@@ -46,6 +56,13 @@ class APIController extends Controller
         if (! \Hash::check(request('password'), $user->password)) {
             return response()->json([
                 'message' => 'Wrong email or password',
+                'status' => 422,
+            ], 422);
+        }
+
+        if ($user->active != 1) {
+            return response()->json([
+                'message' => 'Please activate your account',
                 'status' => 422,
             ], 422);
         }
@@ -103,5 +120,19 @@ class APIController extends Controller
     public function getUser()
     {
         return auth()->user();
+    }
+
+    public function signupActivate($token)
+    {
+        $user = User::where('activation_token', $token)->first();
+        if (!$user) {
+            return response()->json([
+                'message' => 'This activation token is invalid.'
+            ], 404);
+        }
+        $user->active = true;
+        $user->activation_token = '';
+        $user->save();
+        return redirect('/');
     }
 }
