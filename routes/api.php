@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 Route::post('/register', 'Auth\APIController@register');
 Route::post('/login', 'Auth\APIController@login');
+Route::get('/auth/signup/activate/{token}', 'Auth\APIController@signupActivate');
   
 Route::middleware('auth:api')->group( function () {
 	Route::post('/logout', 'Auth\APIController@logout');
