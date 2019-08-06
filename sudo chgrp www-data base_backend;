@@ -1,0 +1,4 @@
+sudo chgrp www-data base_backend;
+sudo chown -R benja:www-data base_backend/;
+sudo chmod -R 775 base_backend/storage/;
+sudo chmod g+s base_backend;

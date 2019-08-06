@@ -16,6 +16,25 @@ use Illuminate\Http\Request;
 Route::post('/register', 'Auth\APIController@register');
 Route::post('/login', 'Auth\APIController@login');
 Route::get('/auth/signup/activate/{token}', 'Auth\APIController@signupActivate');
+
+Route::group([    
+	    'namespace' => 'Auth',    
+	    'middleware' => 'api',    
+	    'prefix' => 'password'
+	], function () {
+	    Route::post('create', 'PasswordResetController@create');
+	    Route::get('find/{token}', 'PasswordResetController@find');
+	    Route::post('reset', 'PasswordResetController@reset');
+});
+
+Route::group([    
+	    'namespace' => 'Auth',    
+	    'middleware' => 'api',    
+	    'prefix' => 'sms'
+	], function () {
+	    Route::post('create', 'SMSController@register');
+
+});
   
 Route::middleware('auth:api')->group( function () {
 	Route::post('/logout', 'Auth\APIController@logout');
