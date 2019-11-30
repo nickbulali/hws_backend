@@ -1,4 +1,4 @@
-sudo chgrp www-data base_backend;
-sudo chown -R benja:www-data base_backend/;
-sudo chmod -R 775 base_backend/storage/;
-sudo chmod g+s base_backend;
+sudo chgrp www-data hrh_frontend;
+sudo chown -R benja:www-data hrh_frontend/;
+sudo chmod -R 775 hrh_frontend/storage/;
+sudo chmod g+s hrh_frontend;
