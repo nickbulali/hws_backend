@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Notifications\SignupActivate;
 use App\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Redirect;
@@ -26,6 +27,9 @@ class APIController extends Controller
             'password' => bcrypt(request('password')),
             'activation_token' => str_random(60)
         ]);
+
+        $healthWorkerRole = Role::find(1);
+        $user->attachRole($healthWorkerRole);
 
         $user->notify(new SignupActivate($user));
 
