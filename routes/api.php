@@ -35,9 +35,10 @@ Route::group([
 	    Route::post('create', 'SMSController@register');
 
 });
+
+Route::resource('role', 'API\RoleController');
   
 Route::middleware('auth:api')->group( function () {
 	Route::post('/logout', 'Auth\APIController@logout');
     Route::get('/get-user', 'Auth\APIController@getUser');
-	Route::resource('jobs', 'API\JobController');
 });

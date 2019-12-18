@@ -1,17 +1,14 @@
 <?php
-
 namespace App\Models;
 
-use Zizaco\Entrust\EntrustRole;
-
-class Role extends EntrustRole
+use Zizaco\Entrust\EntrustPermission;
+class Permission extends EntrustPermission
 {
-    /**
-     * Function for getting the admin role, currently the first user.
-     */
-    public static function getAdminRole()
+    protected $fillable = ['name', 'display_name'];
+
+    public function roles()
     {
-        return Role::find(1);
+        return $this->belongsToMany('App\Models\Role');
     }
 
     public function permissionRole()
@@ -19,8 +16,21 @@ class Role extends EntrustRole
         return $this->hasMany('App\Models\PermissionRole');
     }
 
-    public function permissions()
+    /*
+     * Checks if the Permission has a Role by its name.
+     *
+     * @param string $name Role name.
+     *
+     * @return bool
+     */
+    public function hasRole($name)
     {
-        return $this->belongsToMany('App\Models\Permission');
+        foreach ($this->roles as $role) {
+            if ($role->name == $name) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

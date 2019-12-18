@@ -22,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'active', 'activation_token'
+        'first_name', 'last_name', 'phone_no', 'email', 'password', 'active', 'activation_token'
     ];
 
     /**
@@ -31,12 +31,16 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'activation_token'
+        'password', 'remember_token', 'activation_token', 'last_name', 'phone_no'
     ];
 
     public function roles()
     {
         return $this->belongsToMany('App\Models\Role');
+    }
+    public function profile()
+    {
+        return $this->hasOne('App\Models\Profile', 'user_id', 'id');
     }
 
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Job extends Model
+class Categories extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,6 +12,7 @@ class Job extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'detail'
+        'name'
     ];
+    public $timestamps = false;
 }

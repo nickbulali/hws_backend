@@ -22,14 +22,16 @@ class APIController extends Controller
     public function register(Request $request)
     {
         $user = User::create([
-            'name' => request('name'),
+            'first_name' => request('fname'),
+            'last_name' => request('lname'),
+            'phone_no' => request('phone_no'),
             'email' => request('email'),
             'password' => bcrypt(request('password')),
             'activation_token' => str_random(60)
         ]);
 
-        $healthWorkerRole = Role::find(1);
-        $user->attachRole($healthWorkerRole);
+        $role = Role::find($request->account_type);
+        $user->attachRole($role);
 
         $user->notify(new SignupActivate($user));
 
