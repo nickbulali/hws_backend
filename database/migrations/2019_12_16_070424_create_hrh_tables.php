@@ -10,29 +10,41 @@ class CreateHrhTables extends Migration
     {
        Schema::create('profiles', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->string('fname')->nullable();
-            $table->string('lname')->nullable();
-            $table->string('phone_number')->nullable();
+            $table->string('user_uuid');
             $table->string('profile_pic')->nullable();
 
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_uuid')->references('user_uuid')->on('users');
         });
 
-
-         Schema::create('workers_profile', function (Blueprint $table) {
+        Schema::create('genders', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->string('fname')->nullable();
-            $table->string('lname')->nullable();
-            $table->string('gender')->nullable();
+            $table->string('name');
+        });
+
+        Schema::create('worker_categories', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+        });
+
+        Schema::create('worker_sub_categories', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('worker_category_id');
+            $table->string('name');
+
+            $table->foreign('worker_category_id')->references('id')->on('worker_categories');
+        });
+
+        Schema::create('worker_profiles', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('user_uuid');
+            $table->unsignedInteger('gender_id')->nullable();
             $table->string('id_number')->nullable();
-            $table->string('phone_number')->nullable();
-            $table->string('proffesion')->nullable();
+            $table->unsignedInteger('worker_category_id');
+            $table->unsignedInteger('worker_sub_category_id');
             $table->string('licence_number')->nullable();
-            $table->string('date_licence_renewal')->nullable();
+            $table->date('date_licence_renewal')->nullable();
             $table->string('qualification')->nullable();
             $table->string('specialization')->nullable();
             $table->string('residence')->nullable();
@@ -41,14 +53,12 @@ class CreateHrhTables extends Migration
 
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('worker_category_id')->references('id')->on('worker_categories');
+            $table->foreign('worker_sub_category_id')->references('id')->on('worker_sub_categories');
+            $table->foreign('user_uuid')->references('user_uuid')->on('users');
+            $table->foreign('gender_id')->references('id')->on('genders');
         });
 
-
-        Schema::create('categories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-        });
         Schema::create('status', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');

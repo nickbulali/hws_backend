@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 use Redirect;
 use Response;
+use Illuminate\Support\Str;
 
 class APIController extends Controller
 {
@@ -25,6 +26,7 @@ class APIController extends Controller
             'first_name' => request('fname'),
             'last_name' => request('lname'),
             'phone_no' => request('phone_no'),
+            'user_uuid' =>  Str::uuid(),
             'email' => request('email'),
             'password' => bcrypt(request('password')),
             'activation_token' => str_random(60)
