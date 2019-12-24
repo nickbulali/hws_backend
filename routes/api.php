@@ -40,5 +40,8 @@ Route::resource('role', 'API\RoleController');
   
 Route::middleware('auth:api')->group( function () {
 	Route::post('/logout', 'Auth\APIController@logout');
-    Route::get('/get-user', 'Auth\APIController@getUser');
+	Route::get('/get-user', 'Auth\APIController@getUser');
+	
+	Route::resource('/workerCategory', 'API\WorkerCategoryController');
+	
 });

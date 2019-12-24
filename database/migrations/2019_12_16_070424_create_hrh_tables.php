@@ -39,6 +39,7 @@ class CreateHrhTables extends Migration
         Schema::create('worker_profiles', function (Blueprint $table) {
             $table->increments('id');
             $table->string('user_uuid');
+            $table->string('bio');
             $table->unsignedInteger('gender_id')->nullable();
             $table->string('id_number')->nullable();
             $table->unsignedInteger('worker_category_id');

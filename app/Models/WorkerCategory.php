@@ -15,4 +15,9 @@ class WorkerCategory extends Model
         'name'
     ];
     public $timestamps = false;
+
+    public function workerSubCategory()
+    {
+        return $this->hasMany('App\Models\WorkerSubCategory');
+    }
 }
