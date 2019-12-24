@@ -43,5 +43,6 @@ Route::middleware('auth:api')->group( function () {
 	Route::get('/get-user', 'Auth\APIController@getUser');
 	
 	Route::resource('/workerCategory', 'API\WorkerCategoryController');
+	Route::resource('/userRequest', 'API\UserRequestController');
 	
 });

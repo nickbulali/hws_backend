@@ -38,9 +38,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany('App\Models\Role');
     }
-    public function profile()
+    public function healthWorkerProfile()
     {
-        return $this->hasOne('App\Models\Profile', 'user_id', 'id');
+        return $this->hasOne('App\Models\WorkerProfile', 'user_uuid', 'user_uuid');
     }
 
 }

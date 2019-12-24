@@ -127,7 +127,7 @@ class APIController extends Controller
 
     public function getUser()
     {
-        return auth()->user()->load('roles.permissions');
+        return auth()->user()->load('roles.permissions', 'healthWorkerProfile.workerCategory', 'healthWorkerProfile.workerSubCategory');
     }
 
     public function signupActivate($token)
