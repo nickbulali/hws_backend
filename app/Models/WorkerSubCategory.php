@@ -15,4 +15,9 @@ class WorkerSubCategory extends Model
         'name', 'worker_category_id'
     ];
     public $timestamps = false;
+
+    public function workerCategory()
+    {
+        return $this->belongsToOne('App\Models\WorkerCategory');
+    }
 }
