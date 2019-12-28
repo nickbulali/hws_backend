@@ -31,7 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'activation_token', 'user_uuid', 'id', 'created_at', 'updated_at', 'deleted_at'
+        'password', 'remember_token', 'activation_token', 'user_uuid', 'created_at', 'updated_at', 'deleted_at'
     ];
 
     public function roles()
@@ -41,6 +41,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function healthWorkerProfile()
     {
         return $this->hasOne('App\Models\WorkerProfile', 'user_uuid', 'user_uuid');
+    }
+    public function device()
+    {
+        return $this->hasOne('App\Models\UserDevice', 'user_uuid', 'user_uuid');
     }
 
 }

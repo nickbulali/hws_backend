@@ -60,7 +60,7 @@ class CreateHrhTables extends Migration
             $table->foreign('gender_id')->references('id')->on('genders');
         });
 
-        Schema::create('status', function (Blueprint $table) {
+        Schema::create('statuses', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
         });
@@ -83,33 +83,48 @@ class CreateHrhTables extends Migration
     
         Schema::create('user_requests', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
+            $table->string('requester_uuid');
+            $table->string('recepient_uuid');
+            $table->string('longitude');
+            $table->string('latitude');
+            $table->string('from');
+            $table->string('to');
+            $table->unsignedInteger('categiry_id');
             $table->unsignedInteger('status_id');
-            $table->integer('comment')->nullable();
-           
+
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('status_id')->references('id')->on('status');
+            $table->foreign('requester_uuid')->references('user_uuid')->on('users');
+            $table->foreign('recepient_uuid')->references('user_uuid')->on('users');
+            $table->foreign('status_id')->references('id')->on('statuses');
         });
         Schema::create('request_confirmations', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
+            $table->string('requester_uuid');
+            $table->string('recepient_uuid');
+            $table->string('longitude');
+            $table->string('latitude');
+            $table->string('from');
+            $table->string('to');
+            $table->unsignedInteger('categiry_id');
             $table->unsignedInteger('status_id');
 
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('status_id')->references('id')->on('status');
+            $table->foreign('requester_uuid')->references('user_uuid')->on('users');
+            $table->foreign('recepient_uuid')->references('user_uuid')->on('users');
+            $table->foreign('status_id')->references('id')->on('statuses');
         });
         Schema::create('user_devices', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->string('token');
+            $table->string('user_uuid');
+            $table->string('firebase_token')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('latitude')->nullable();
 
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_uuid')->references('user_uuid')->on('users');
         });
         Schema::create('notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
@@ -129,7 +144,7 @@ class CreateHrhTables extends Migration
     public function down()
     {
         Schema::drop('categories');
-        Schema::drop('status');
+        Schema::drop('statuses');
         Schema::drop('user_requests');
         Schema::drop('request_confirmations');
         Schema::drop('notifications');

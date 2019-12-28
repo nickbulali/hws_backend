@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserRequests extends Model
+class UserRequest extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +12,7 @@ class UserRequests extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'status_id', 'comment'
+        'requester_uuid', 'recepient_uuid', 'longitude', 'latitude', 'from', 'to', 'categiry_id', 'status_id'
     ];
 
     public function user()

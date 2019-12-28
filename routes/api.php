@@ -41,7 +41,11 @@ Route::resource('role', 'API\RoleController');
 Route::middleware('auth:api')->group( function () {
 	Route::post('/logout', 'Auth\APIController@logout');
 	Route::get('/get-user', 'Auth\APIController@getUser');
-	
+
+	Route::get('/notifications', 'Auth\APIController@notifications');
+    Route::get('/notificationRead/{id}', 'Auth\APIController@notificationRead');
+
+	Route::resource('/userDevice', 'API\UserDeviceController');
 	Route::resource('/workerCategory', 'API\WorkerCategoryController');
 	Route::resource('/workerSubCategory', 'API\WorkerSubCategoryController');
 	Route::resource('/userRequest', 'API\UserRequestController');

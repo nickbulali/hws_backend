@@ -17,6 +17,11 @@ class CreateSystemData extends Migration
         $male = \App\Models\Gender::create(['name' => 'Male']);
         $female = \App\Models\Gender::create(['name' => 'Female']);
 
+        \App\Models\Statuses::create(['name' => 'Pending']);
+        \App\Models\Statuses::create(['name' => 'Active']);
+        \App\Models\Statuses::create(['name' => 'Completed']);
+        \App\Models\Statuses::create(['name' => 'Cancelled']);
+
         $doctor = \App\Models\WorkerCategory::create(['name' => 'Doctor']);
         $nurse = \App\Models\WorkerCategory::create(['name' => 'Nurse']);
         $clinicalOfficer = \App\Models\WorkerCategory::create(['name' => 'Clinical Officer (CO)']);

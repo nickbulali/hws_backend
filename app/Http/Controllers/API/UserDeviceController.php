@@ -4,10 +4,10 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\UserDevices;
+use App\Models\UserDevice;
 use Auth;
 
-class UserDevicesController extends Controller
+class UserDeviceController extends Controller
 {
     public function index(Request $request)
     {
@@ -34,10 +34,15 @@ class UserDevicesController extends Controller
         if ($validator->fails()) {
             return response()->json($validator, 422);
         } else {
-            $user = UserDevices::whereUser_id(Auth::user()->id)->first();
+            $user = UserDevice::whereUser_uuid(Auth::user()->user_uuid)->first();
             if (!is_null($user)){
-                $token = UserDevices::findOrFail($user->id);
-                $token->token = $request->input('fcmToken');
+                $token = UserDevice::whereUser_uuid($user->user_uuid)->first();
+                if($request->input('fcmToken')){
+                    $token->firebase_token = $request->input('fcmToken');
+                }else{
+                    $token->longitude = $request->input('longitude');
+                    $token->latitude = $request->input('latitude');
+                }
 
                 try {
                     $token->save();
@@ -46,9 +51,14 @@ class UserDevicesController extends Controller
                     return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
                 }
             }else{
-                $token = new UserDevices;
-                $token->token = $request->input('fcmToken');
-                $token->user_id = Auth::user()->id;
+                $token = new UserDevice;
+                $token->user_uuid = Auth::user()->user_uuid;
+                if($request->input('fcmToken')){
+                    $token->firebase_token = $request->input('fcmToken');
+                }else{
+                    $token->longitude = $request->input('longitude');
+                    $token->latitude = $request->input('latitude');
+                }
 
                 try {
                     $token->save();

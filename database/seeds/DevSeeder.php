@@ -65,6 +65,12 @@ class DevSeeder extends Seeder
             'experience_years' => 10,
 
         ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $workerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '36.8001948',
+            'latitude' => '-1.311504'
+        ]);
 
         $nurseWorkerUser = \App\User::create([
             'user_uuid' => Str::uuid(),
@@ -90,6 +96,12 @@ class DevSeeder extends Seeder
             'residence' => 'Kisumu, Kenya',
             'experience_years' => 5,
 
+        ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '34.7680',
+            'latitude' => '-0.0917'
         ]);
 
         $nurseAWorkerUser = \App\User::create([
@@ -117,6 +129,12 @@ class DevSeeder extends Seeder
             'experience_years' => 7,
 
         ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseAWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '36.7476',
+            'latitude' => '-1.3641'
+        ]);
 
         $nurseBWorkerUser = \App\User::create([
             'user_uuid' => Str::uuid(),
@@ -142,6 +160,12 @@ class DevSeeder extends Seeder
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 2,
 
+        ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseBWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '36.8815',
+            'latitude' => '-1.2922'
         ]);
 
         $nurseBWorkerUser = \App\User::create([
@@ -169,6 +193,12 @@ class DevSeeder extends Seeder
             'experience_years' => 21,
 
         ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseBWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '36.8338',
+            'latitude' => '-1.2877'
+        ]);
 
         $nurseBWorkerUser = \App\User::create([
             'user_uuid' => Str::uuid(),
@@ -194,6 +224,12 @@ class DevSeeder extends Seeder
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 8,
 
+        ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseBWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '36.7281',
+            'latitude' => '-1.2890'
         ]);
 
         $nurseBWorkerUser = \App\User::create([
@@ -221,6 +257,12 @@ class DevSeeder extends Seeder
             'experience_years' => 2,
 
         ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseBWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '36.7947',
+            'latitude' => '-1.2108'
+        ]);
 
         $nurseBWorkerUser = \App\User::create([
             'user_uuid' => Str::uuid(),
@@ -246,6 +288,12 @@ class DevSeeder extends Seeder
             'residence' => 'Kisumu, Kenya',
             'experience_years' => 4,
 
+        ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseBWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '34.7768',
+            'latitude' => '-0.0786'
         ]);
 
         $nurseBWorkerUser = \App\User::create([
@@ -273,6 +321,12 @@ class DevSeeder extends Seeder
             'experience_years' => 10,
 
         ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseBWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '39.6461',
+            'latitude' => '-0.4532'
+        ]);
 
         $nurseBWorkerUser = \App\User::create([
             'user_uuid' => Str::uuid(),
@@ -298,6 +352,12 @@ class DevSeeder extends Seeder
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 15,
 
+        ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseBWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '36.7041',
+            'latitude' => '-1.3204'
         ]);
 
         $nurseBWorkerUser = \App\User::create([
@@ -325,6 +385,12 @@ class DevSeeder extends Seeder
             'experience_years' => 15,
 
         ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseBWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '36.8017',
+            'latitude' => '-1.3066'
+        ]);
 
         $nurseBWorkerUser = \App\User::create([
             'user_uuid' => Str::uuid(),
@@ -350,6 +416,12 @@ class DevSeeder extends Seeder
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 10,
 
+        ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseBWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '36.5017',
+            'latitude' => '-1.1066'
         ]);
 
         $nurseBWorkerUser = \App\User::create([
@@ -377,6 +449,12 @@ class DevSeeder extends Seeder
             'experience_years' => 17,
 
         ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseBWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '36.3017',
+            'latitude' => '-1.3066'
+        ]);
 
         $nurseBWorkerUser = \App\User::create([
             'user_uuid' => Str::uuid(),
@@ -402,6 +480,12 @@ class DevSeeder extends Seeder
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 32,
 
+        ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseBWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '36.2017',
+            'latitude' => '-1.4066'
         ]);
     }
 }

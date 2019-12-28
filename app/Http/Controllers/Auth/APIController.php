@@ -7,11 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Notifications\SignupActivate;
 use App\User;
 use App\Models\Role;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Redirect;
 use Response;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class APIController extends Controller
 {
@@ -143,4 +145,19 @@ class APIController extends Controller
         $user->save();
         return redirect('/');
     }
+
+    public function notifications()
+    {
+        return auth()->user()->unreadNotifications()->limit(5)->get()->toArray();
+    }
+
+    public function notificationRead($id)
+    {
+        $notification = Notification::whereId($id)->first();
+        $notification->read_at = Carbon::now();
+        $notification->save();
+
+        return response()->json(200);
+    }
+
 }
