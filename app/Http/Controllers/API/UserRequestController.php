@@ -40,12 +40,54 @@ class UserRequestController extends Controller
                 $query->where('worker_category_id', $request->category);
             })->whereHas('device', function ($query) use ($request) {
                 $query->select(DB::raw('*, ( 6367 * acos( cos( radians('.$request->location['lat'].') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('.$request->location['lng'].') ) + sin( radians('.$request->location['lat'].') ) * sin( radians( latitude ) ) ) ) AS distance'))
-                ->orderBy('distance', 'desc');
+                ->having('distance', '<', 50)
+                ->orderBy('distance');
+
             })
             
-            ->with('healthWorkerProfile.workerCategory', 'healthWorkerProfile.workerSubCategory')
+            ->with('healthWorkerProfile.workerCategory', 'healthWorkerProfile.workerSubCategory')->orderBy('first_name', 'asc')
                 ->paginate(10);
 
+            foreach($userRequest as $user){
+                $userDevice = UserDevice::whereUser_uuid($user->user_uuid)->first();
+
+                $earthRadius = 6371;
+                $latFrom = deg2rad($request->location['lat']);
+                $lonFrom = deg2rad($request->location['lng']);
+                $latTo = deg2rad($userDevice->latitude);
+                $lonTo = deg2rad($userDevice->longitude);
+
+                $latDelta = $latTo - $latFrom;
+                $lonDelta = $lonTo - $lonFrom;
+
+                $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+                    cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+
+                $user->setAttribute('distance', $angle * $earthRadius);
+            }
+        } else if ($request->query('type') == 'filter') { 
+            
+            $userRequest = User::whereHas('healthWorkerProfile', function ($query) use ($request) {
+                if(!is_null($request->genderId)){
+                    $query->whereGender_id($request->genderId);
+                }
+                if(!is_null($request->subGroup)){
+                    $query->whereWorker_sub_category_id($request->subGroup);
+                }
+                $query->where('worker_category_id', $request->category);
+            })->whereHas('device', function ($query) use ($request) {
+                $query->select(DB::raw('*, ( 6367 * acos( cos( radians('.$request->location['lat'].') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('.$request->location['lng'].') ) + sin( radians('.$request->location['lat'].') ) * sin( radians( latitude ) ) ) ) AS distance'))
+                ->having('distance', '<', $request->distance)
+                ->orderBy('distance');
+            })
+            
+            ->with('healthWorkerProfile.workerCategory', 'healthWorkerProfile.workerSubCategory')->orderBy('first_name', 'asc')
+                ->paginate(10);
+
+            
+            
+            
+            
             foreach($userRequest as $user){
                 $userDevice = UserDevice::whereUser_uuid($user->user_uuid)->first();
 
