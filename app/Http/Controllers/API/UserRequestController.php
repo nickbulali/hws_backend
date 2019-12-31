@@ -22,9 +22,33 @@ class UserRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->query('type') == 'individualUpcoming') {
+            $userRequest = UserRequest::whereRequester_uuid(Auth::user()->user_uuid)->whereStatus_id(1)->with('recipient.healthWorkerProfile.workerCategory', 'recipient.healthWorkerProfile.workerSubCategory', 'status')->paginate(10);
+        } else if ($request->query('type') == 'individualHistorical'){
+
+        }
+
+        foreach($userRequest as $user){
+            $userDevice = UserDevice::whereUser_uuid($user->recepient_uuid)->first();
+
+            $earthRadius = 6371;
+            $latFrom = deg2rad($user->latitude);
+            $lonFrom = deg2rad($user->longitude);
+            $latTo = deg2rad($userDevice->latitude);
+            $lonTo = deg2rad($userDevice->longitude);
+
+            $latDelta = $latTo - $latFrom;
+            $lonDelta = $lonTo - $lonFrom;
+
+            $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+                cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+
+            $user->setAttribute('distance', $angle * $earthRadius);
+        }
+
+        return response()->json($userRequest);
     }
 
     /**
@@ -83,10 +107,6 @@ class UserRequestController extends Controller
             
             ->with('healthWorkerProfile.workerCategory', 'healthWorkerProfile.workerSubCategory')->orderBy('first_name', 'asc')
                 ->paginate(10);
-
-            
-            
-            
             
             foreach($userRequest as $user){
                 $userDevice = UserDevice::whereUser_uuid($user->user_uuid)->first();
