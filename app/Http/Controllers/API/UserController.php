@@ -7,6 +7,7 @@ use Auth;
 
 use App\User;
 use App\Models\Profile;
+use App\Models\WorkerProfile;
 class UserController extends Controller
 {
    public function index(Request $request)
@@ -30,36 +31,48 @@ class UserController extends Controller
     public function store(Request $request)
     {
        $rules = [
-           'role_id' => 'required',
            'email'    => 'required',
-           'password' => 'required',
            'fname'=> 'required',
            'lname'=> 'required',
-           'phone_number'=> 'required',
        ];
        $validator = \Validator::make($request->all(), $rules);
        if ($validator->fails()) {
            return response()->json($validator, 422);
        } else {
-           $user = new User;
-           $user->email = $request->input('email');
-           $user->role_id = $request->input('role_id');
-           $user->active = 1;
-           $user->password = bcrypt($request->input('password'));
-           //$user->remember_token = $request->input('remember_token');
-           try {
-            $user->save();
-            $profile = new Profile;
-            $profile->user_id = $user->id;
-            $profile->fname = $request->input('fname');
-            $profile->lname = $request->input('lname');
-            $profile->phone_number = $request->input('phone_number');
-            
-                    $profile->save();
-                return response()->json($user);
+            $user = User::find($request->id);
+            $user->email = $request->email;
+            $user->first_name = $request->fname;
+            $user->last_name = $request->lname;
+            try {
+                $user->save();
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
+            if($request->bio){
+                $profile = WorkerProfile::whereUser_uuid($user->user_uuid)->first();
+                if(is_null($profile)){
+                    $profile = new WorkerProfile;
+                    $profile->user_uuid = $user->user_uuid;
+                }
+                $profile->bio = $request->bio;
+                $profile->gender_id = $request->gender_id;
+                $profile->id_number = $request->id_number;
+                $profile->worker_category_id = $request->worker_category_id;
+                $profile->worker_sub_category_id = $request->worker_sub_category_id;
+                $profile->licence_number = $request->licence_number;
+                $profile->date_licence_renewal = $request->date_licence_renewal;
+                $profile->qualification = $request->qualification;
+                $profile->specialization = $request->specialization;
+                $profile->residence = $request->residence;
+                $profile->experience_years = $request->experience_years;
+                $profile->profile_pic = $request->profile_pic;
+                try {
+                    $profile->save();
+                } catch (\Illuminate\Database\QueryException $e) {
+                    return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                }
+            }
+            return response()->json($user);
         }
    }
        

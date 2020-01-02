@@ -45,6 +45,7 @@ Route::middleware('auth:api')->group( function () {
 	Route::get('/notifications', 'Auth\APIController@notifications');
     Route::get('/notificationRead/{id}', 'Auth\APIController@notificationRead');
 
+	Route::resource('/user', 'API\UserController');
 	Route::resource('/userDevice', 'API\UserDeviceController');
 	Route::resource('/workerCategory', 'API\WorkerCategoryController');
 	Route::resource('/workerSubCategory', 'API\WorkerSubCategoryController');

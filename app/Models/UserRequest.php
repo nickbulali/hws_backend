@@ -22,7 +22,7 @@ class UserRequest extends Model
 
     public function requester()
     {
-        return $this->belongsTo('App\User', 'user_uuid', 'requester_uuid');
+        return $this->hasOne('App\User', 'user_uuid', 'requester_uuid');
     }
     public function recipient()
     {
