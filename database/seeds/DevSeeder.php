@@ -487,5 +487,133 @@ class DevSeeder extends Seeder
             'longitude' => '36.2017',
             'latitude' => '-1.4066'
         ]);
+
+        $nurseWorkerUser = \App\User::create([
+            'user_uuid' => Str::uuid(),
+            'first_name' => 'Gloria',
+            'last_name' => 'Anyango',
+            'email' => 'gloria@hrh.local',
+            'phone_no' => '0721 549 000',
+            'password'=>'$2y$10$ClS05CwMFgK7dxtj4gma3OddLThoskmVJqMVTSX3KwMfMOzgIMpv2',
+            'active'=>1
+        ]);
+        $nurseWorkerUser->attachRole($workerRole);
+        \App\Models\WorkerProfile::create([
+            'user_uuid' => $nurseWorkerUser->user_uuid,
+            'bio' => 'XX DD, MD, MPH, is the Robert P. Kelch, MD Research Professor of Pediatrics at the University of Nairobi Medical School and Professor at the Medical School and at the University of Nairobi School of Public Health. She serves as the Associate Chief Medical Information Officer for Pediatric Research at Nairobi Medicine and as Associate Chair for Health Metrics and Learning Health Systems for the Department of Pediatrics.',
+            'gender_id' => 2,
+            'id_number' => 21332234,
+            'worker_category_id' => 2,
+            'worker_sub_category_id' => 2,
+            'licence_number' => 322828,
+            'date_licence_renewal' => '2017-10-24',
+            'qualification' => 'NER+',
+            'specialization' => 'Nursing',
+            'residence' => 'Kisumu, Kenya',
+            'experience_years' => 5,
+
+        ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '33.9680',
+            'latitude' => '-0.0517'
+        ]);
+
+        $nurseWorkerUser = \App\User::create([
+            'user_uuid' => Str::uuid(),
+            'first_name' => 'Rebecca',
+            'last_name' => 'Watson',
+            'email' => 'rebecca@hrh.local',
+            'phone_no' => '0734 945 230',
+            'password'=>'$2y$10$ClS05CwMFgK7dxtj4gma3OddLThoskmVJqMVTSX3KwMfMOzgIMpv2',
+            'active'=>1
+        ]);
+        $nurseWorkerUser->attachRole($workerRole);
+        \App\Models\WorkerProfile::create([
+            'user_uuid' => $nurseWorkerUser->user_uuid,
+            'bio' => 'XX DD, MD, MPH, is the Robert P. Kelch, MD Research Professor of Pediatrics at the University of Nairobi Medical School and Professor at the Medical School and at the University of Nairobi School of Public Health. She serves as the Associate Chief Medical Information Officer for Pediatric Research at Nairobi Medicine and as Associate Chair for Health Metrics and Learning Health Systems for the Department of Pediatrics.',
+            'gender_id' => 2,
+            'id_number' => 21332394,
+            'worker_category_id' => 2,
+            'worker_sub_category_id' => 2,
+            'licence_number' => 892828,
+            'date_licence_renewal' => '2018-10-24',
+            'qualification' => 'NER+',
+            'specialization' => 'Nursing',
+            'residence' => 'Kisumu, Kenya',
+            'experience_years' => 5,
+
+        ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '35.6680',
+            'latitude' => '-0.1917'
+        ]);
+
+        $nurseWorkerUser = \App\User::create([
+            'user_uuid' => Str::uuid(),
+            'first_name' => 'Robert',
+            'last_name' => 'Omondi',
+            'email' => 'robert@hrh.local',
+            'phone_no' => '0721 949 034',
+            'password'=>'$2y$10$ClS05CwMFgK7dxtj4gma3OddLThoskmVJqMVTSX3KwMfMOzgIMpv2',
+            'active'=>1
+        ]);
+        $nurseWorkerUser->attachRole($workerRole);
+        \App\Models\WorkerProfile::create([
+            'user_uuid' => $nurseWorkerUser->user_uuid,
+            'bio' => 'XX DD, MD, MPH, is the Robert P. Kelch, MD Research Professor of Pediatrics at the University of Nairobi Medical School and Professor at the Medical School and at the University of Nairobi School of Public Health. She serves as the Associate Chief Medical Information Officer for Pediatric Research at Nairobi Medicine and as Associate Chair for Health Metrics and Learning Health Systems for the Department of Pediatrics.',
+            'gender_id' => 1,
+            'id_number' => 22322394,
+            'worker_category_id' => 2,
+            'worker_sub_category_id' => 2,
+            'licence_number' => 232828,
+            'date_licence_renewal' => '2019-10-24',
+            'qualification' => 'NER+',
+            'specialization' => 'Nursing',
+            'residence' => 'Kisumu, Kenya',
+            'experience_years' => 5,
+
+        ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '33.7680',
+            'latitude' => '-0.1917'
+        ]);
+
+        $nurseWorkerUser = \App\User::create([
+            'user_uuid' => Str::uuid(),
+            'first_name' => 'Walter',
+            'last_name' => 'Were',
+            'email' => 'walter21@hrh.local',
+            'phone_no' => '0700 239 2300',
+            'password'=>'$2y$10$ClS05CwMFgK7dxtj4gma3OddLThoskmVJqMVTSX3KwMfMOzgIMpv2',
+            'active'=>1
+        ]);
+        $nurseWorkerUser->attachRole($workerRole);
+        \App\Models\WorkerProfile::create([
+            'user_uuid' => $nurseWorkerUser->user_uuid,
+            'bio' => 'XX DD, MD, MPH, is the Robert P. Kelch, MD Research Professor of Pediatrics at the University of Nairobi Medical School and Professor at the Medical School and at the University of Nairobi School of Public Health. She serves as the Associate Chief Medical Information Officer for Pediatric Research at Nairobi Medicine and as Associate Chair for Health Metrics and Learning Health Systems for the Department of Pediatrics.',
+            'gender_id' => 1,
+            'id_number' => 21332394,
+            'worker_category_id' => 2,
+            'worker_sub_category_id' => 2,
+            'licence_number' => 812828,
+            'date_licence_renewal' => '2018-11-24',
+            'qualification' => 'NER+',
+            'specialization' => 'Nursing',
+            'residence' => 'Kisumu, Kenya',
+            'experience_years' => 5,
+
+        ]);
+        \App\Models\UserDevice::create([
+            'user_uuid' => $nurseWorkerUser->user_uuid,
+            'firebase_token' => 'ewksdbqD_Pg:APA91bF3jlY3vbHOz95FMIIRG_3oUX9fzs2RO8d-tglf3jQZB-cbqxUge7eJM82QnwMfNT4SrFvu0IMwGP3wUcwHW1kVeETQZpCiKCwH7O-ydY4UefWeHmtmfW17EZ-KVbP4Rsn1Ghet',
+            'longitude' => '32.7680',
+            'latitude' => '-0.2917'
+        ]);
     }
 }

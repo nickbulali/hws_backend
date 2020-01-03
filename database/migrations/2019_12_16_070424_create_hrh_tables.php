@@ -98,6 +98,31 @@ class CreateHrhTables extends Migration
             $table->foreign('recepient_uuid')->references('user_uuid')->on('users');
             $table->foreign('status_id')->references('id')->on('statuses');
         });
+
+        Schema::create('user_ratings', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('client_uuid');
+            $table->string('worker_uuid');
+            $table->integer('rating')->nullable();
+            $table->string('comment')->nullable();
+
+            $table->timestamps();
+
+            $table->foreign('client_uuid')->references('user_uuid')->on('users');
+            $table->foreign('worker_uuid')->references('user_uuid')->on('users');
+        });
+
+        Schema::create('user_favourites', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('client_uuid');
+            $table->string('worker_uuid');
+
+            $table->timestamps();
+
+            $table->foreign('client_uuid')->references('user_uuid')->on('users');
+            $table->foreign('worker_uuid')->references('user_uuid')->on('users');
+        });
+
         Schema::create('request_confirmations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('requester_uuid');

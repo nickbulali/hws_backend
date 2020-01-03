@@ -14,6 +14,7 @@ use App\Notifications\CancelServiceRequest;
 
 use App\Models\UserDevice;
 use App\Models\UserRequest;
+use App\Models\UserRating;
 use App\Models\Facility;
 use App\User;
 use Auth;
@@ -57,6 +58,23 @@ class UserRequestController extends Controller
             $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
                 cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
 
+            $workerRating = UserRating::whereWorker_uuid($user->recepient_uuid)->get();
+            $userRated = UserRating::whereClient_uuid(Auth::user()->user_uuid)->whereWorker_uuid($user->recepient_uuid)->first();
+           
+            if(count($workerRating) == 0){
+                $user->setAttribute('rating', 0);
+                $user->setAttribute('reviewers', 0);
+            }else{
+                $rating = $workerRating->avg('rating');
+                $user->setAttribute('rating', $rating);
+                $user->setAttribute('reviewers', count($workerRating));
+            }
+            if(!is_null($userRated)){
+                $user->setAttribute('hasRated', 1);
+            }else{
+                $user->setAttribute('hasRated', 0);
+            }
+
             $user->setAttribute('distance', $angle * $earthRadius);
             $user->setAttribute('workerLocation', [$userDevice->latitude, $userDevice->longitude]);
         }
@@ -99,6 +117,18 @@ class UserRequestController extends Controller
 
                 $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
                     cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+
+                $workerRating = UserRating::whereWorker_uuid($user->recepient_uuid)->get();
+                $userRated = UserRating::whereClient_uuid(Auth::user()->user_uuid)->whereWorker_uuid($user->recepient_uuid)->first();
+                
+                if(count($workerRating) == 0){
+                    $user->setAttribute('rating', 0);
+                    $user->setAttribute('reviewers', 0);
+                }else{
+                    $rating = $workerRating->avg('rating');
+                    $user->setAttribute('rating', $rating);
+                    $user->setAttribute('reviewers', count($workerRating));
+                }
 
                 $user->setAttribute('distance', $angle * $earthRadius);
             }
@@ -284,7 +314,7 @@ class UserRequestController extends Controller
         }
 
         $userDevice = UserDevice::whereUser_uuid($userRequest->requester_uuid)->first();
-        if(!is_null($userDevice)){
+        if(!is_null($userDevice) && !is_null($userDevice->firebase_token)){
             $client = new Client(); //GuzzleHttp\Client
             $headers = [
                 'Authorization' => 'key=AAAAYafBYz8:APA91bG42hm3weq_NaqP4AU-p_KCAhgHd4HkNpTlbvCKO1u6ePKHqCu7uZ1Cip0M_UVhxWQRcGU_bARCWsSDkYWkhNmQcNTtyNnZqJyo70HvGj3R6WRISUVAV0oKXHWJelT4HcSDhrbK',        
