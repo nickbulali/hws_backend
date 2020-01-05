@@ -48,6 +48,7 @@ Route::middleware('auth:api')->group( function () {
 	Route::resource('/user', 'API\UserController');
 	Route::resource('/userDevice', 'API\UserDeviceController');
 	Route::resource('/userRating', 'API\UserRatingController');
+	Route::resource('/userFavourite', 'API\UserFavouriteController');
 	Route::resource('/workerCategory', 'API\WorkerCategoryController');
 	Route::resource('/workerSubCategory', 'API\WorkerSubCategoryController');
 	Route::resource('/userRequest', 'API\UserRequestController');

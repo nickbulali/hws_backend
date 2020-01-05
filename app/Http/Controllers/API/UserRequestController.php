@@ -14,6 +14,7 @@ use App\Notifications\CancelServiceRequest;
 
 use App\Models\UserDevice;
 use App\Models\UserRequest;
+use App\Models\UserFavourite;
 use App\Models\UserRating;
 use App\Models\Facility;
 use App\User;
@@ -60,6 +61,7 @@ class UserRequestController extends Controller
 
             $workerRating = UserRating::whereWorker_uuid($user->recepient_uuid)->get();
             $userRated = UserRating::whereClient_uuid(Auth::user()->user_uuid)->whereWorker_uuid($user->recepient_uuid)->first();
+            $userFavourite = UserFavourite::whereClient_uuid(Auth::user()->user_uuid)->whereWorker_uuid($user->recepient_uuid)->first();
            
             if(count($workerRating) == 0){
                 $user->setAttribute('rating', 0);
@@ -73,6 +75,11 @@ class UserRequestController extends Controller
                 $user->setAttribute('hasRated', 1);
             }else{
                 $user->setAttribute('hasRated', 0);
+            }
+            if(!is_null($userFavourite)){
+                $user->setAttribute('isFavourite', 1);
+            }else{
+                $user->setAttribute('isFavourite', 0);
             }
 
             $user->setAttribute('distance', $angle * $earthRadius);
@@ -118,8 +125,8 @@ class UserRequestController extends Controller
                 $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
                     cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
 
-                $workerRating = UserRating::whereWorker_uuid($user->recepient_uuid)->get();
-                $userRated = UserRating::whereClient_uuid(Auth::user()->user_uuid)->whereWorker_uuid($user->recepient_uuid)->first();
+                $workerRating = UserRating::whereWorker_uuid($user->user_uuid)->get();
+                $userRated = UserRating::whereClient_uuid(Auth::user()->user_uuid)->whereWorker_uuid($user->user_uuid)->first();
                 
                 if(count($workerRating) == 0){
                     $user->setAttribute('rating', 0);
