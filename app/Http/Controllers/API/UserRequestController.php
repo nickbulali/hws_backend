@@ -42,6 +42,10 @@ class UserRequestController extends Controller
             $userRequest = UserRequest::whereRecepient_uuid(Auth::user()->user_uuid)->where(function ($query) {
                 $query->whereStatus_id(1)->orWhere('status_id', 2);
             })->with('requester', 'status')->orderBy('created_at', 'desc')->paginate(10);
+        } else if ($request->query('type') == 'workerHistorical'){
+            $userRequest = UserRequest::whereRecepient_uuid(Auth::user()->user_uuid)->where(function ($query) {
+                $query->whereStatus_id(3)->orWhere('status_id', 4);
+            })->with('requester', 'status')->orderBy('created_at', 'desc')->paginate(10);
         }
 
         foreach($userRequest as $user){
@@ -99,7 +103,7 @@ class UserRequestController extends Controller
     {
         if ($request->query('type') == 'new') {
             $userRequest = User::whereHas('healthWorkerProfile', function ($query) use ($request) {
-                $query->where('worker_category_id', $request->category);
+                $query->where('worker_category_id', $request->category)->whereActive(1);
             })->whereHas('device', function ($query) use ($request) {
                 $query->select(DB::raw('*, ( 6367 * acos( cos( radians('.$request->location['lat'].') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('.$request->location['lng'].') ) + sin( radians('.$request->location['lat'].') ) * sin( radians( latitude ) ) ) ) AS distance'))
                 ->having('distance', '<', 50)

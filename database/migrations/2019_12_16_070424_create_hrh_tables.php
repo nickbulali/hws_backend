@@ -51,6 +51,7 @@ class CreateHrhTables extends Migration
             $table->string('residence')->nullable();
             $table->string('experience_years')->nullable();
             $table->string('profile_pic')->nullable();
+            $table->string('active')->default(1);
 
             $table->timestamps();
 

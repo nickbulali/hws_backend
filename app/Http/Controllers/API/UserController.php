@@ -8,13 +8,31 @@ use Auth;
 use App\User;
 use App\Models\Profile;
 use App\Models\WorkerProfile;
+use App\Models\UserRating;
+use App\Models\UserRequest;
+
 class UserController extends Controller
 {
    public function index(Request $request)
    {
-     if ($request->query('search')) {
+        if ($request->query('search')) {
             $search = $request->query('search');
             $user= User::where('name', 'LIKE', "%{$search}%")->get();
+        } else if ($request->query('type')=='stats') {
+            $user = User::whereUser_uuid(Auth::user()->user_uuid)->first();
+            $profile = WorkerProfile::whereUser_uuid($user->user_uuid)->first();
+            $userRequest= UserRequest::whereRecepient_uuid($user->user_uuid)->whereStatus_id(3)->get();
+            $workerRating = UserRating::whereWorker_uuid($user->user_uuid)->get();
+            if(count($workerRating) == 0){
+                $user->setAttribute('rating', 0);
+                $user->setAttribute('reviewers', 0);
+            }else{
+                $rating = $workerRating->avg('rating');
+                $user->setAttribute('rating', $rating);
+                $user->setAttribute('reviewers', count($workerRating));
+            }
+            $user->setAttribute('totalVisits', count($userRequest));
+            $user->setAttribute('profile', $profile);
         } else {
             $user= User::orderBy('name', 'DESC')->get();
         }
@@ -102,33 +120,55 @@ class UserController extends Controller
      * @param  int  id
      * @return \Illuminate\Http\Response
      */
-
- 
-
-
-
     
     public function update(Request $request, $id)
     {
-        $rules = [
-            'name' => 'required',
-        ];
-        $validator = \Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json($validator, 422);
-        } else {
-            $user = User::findOrFail($id);
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
-            $user->role = $request->input('role');
-            $user->active = $request->input('active');
-            $user->password = $request->input('password');
+        if($request->type == 'offline'){
+            $user = User::whereId($id)->first();
+            $profile = WorkerProfile::whereUser_uuid($user->user_uuid)->first();
+
+            $profile->active = 0;
 
             try {
-                $user->save();
-                return response()->json($user);
+                $profile->save();
+                return response()->json($profile);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        } else if ($request->type == 'online'){
+            $user = User::whereId($id)->first();
+            $profile = WorkerProfile::whereUser_uuid($user->user_uuid)->first();
+
+            $profile->active = 1;
+
+            try {
+                $profile->save();
+                return response()->json($profile);
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        
+        }else{
+            $rules = [
+                'name' => 'required',
+            ];
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json($validator, 422);
+            } else {
+                $user = User::findOrFail($id);
+                $user->name = $request->input('name');
+                $user->email = $request->input('email');
+                $user->role = $request->input('role');
+                $user->active = $request->input('active');
+                $user->password = $request->input('password');
+
+                try {
+                    $user->save();
+                    return response()->json($user);
+                } catch (\Illuminate\Database\QueryException $e) {
+                    return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                }
             }
         }
     }
