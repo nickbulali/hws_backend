@@ -48,50 +48,79 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-       $rules = [
-           'email'    => 'required',
-           'fname'=> 'required',
-           'lname'=> 'required',
-       ];
-       $validator = \Validator::make($request->all(), $rules);
-       if ($validator->fails()) {
-           return response()->json($validator, 422);
-       } else {
-            $user = User::find($request->id);
-            $user->email = $request->email;
-            $user->first_name = $request->fname;
-            $user->last_name = $request->lname;
-            try {
-                $user->save();
-            } catch (\Illuminate\Database\QueryException $e) {
-                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
-            }
-            if($request->bio){
-                $profile = WorkerProfile::whereUser_uuid($user->user_uuid)->first();
-                if(is_null($profile)){
-                    $profile = new WorkerProfile;
-                    $profile->user_uuid = $user->user_uuid;
+        if($request->query('type')=='image'){
+            $rules = [
+                'file' => 'image:jpeg,jpg,png|required|file',
+                'id' => 'required',
+                'name' => 'required',
+    
+            ];
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json($validator, 422);
+            } else {
+                if ($request->file('file')->isValid()) {
+                    $extension = $request->file('file')->getClientOriginalExtension();
+                    $fileName = rand(11111, 99999).'.'.$extension;
+                    $request->file('file')->storeAs('pictures', $fileName);
                 }
-                $profile->bio = $request->bio;
-                $profile->gender_id = $request->gender_id;
-                $profile->id_number = $request->id_number;
-                $profile->worker_category_id = $request->worker_category_id;
-                $profile->worker_sub_category_id = $request->worker_sub_category_id;
-                $profile->licence_number = $request->licence_number;
-                $profile->date_licence_renewal = $request->date_licence_renewal;
-                $profile->qualification = $request->qualification;
-                $profile->specialization = $request->specialization;
-                $profile->residence = $request->residence;
-                $profile->experience_years = $request->experience_years;
-                $profile->profile_pic = $request->profile_pic;
+                $user = User::whereId($request->id)->first();
+                $user->image = $fileName;
                 try {
-                    $profile->save();
+                    $user->save();
+    
+                    return response()->json($user);
                 } catch (\Illuminate\Database\QueryException $e) {
                     return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
                 }
             }
-            return response()->json($user);
+        }else{
+            $rules = [
+                'email'    => 'required',
+                'fname'=> 'required',
+                'lname'=> 'required',
+            ];
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json($validator, 422);
+            } else {
+                $user = User::find($request->id);
+                $user->email = $request->email;
+                $user->first_name = $request->fname;
+                $user->last_name = $request->lname;
+                try {
+                    $user->save();
+                } catch (\Illuminate\Database\QueryException $e) {
+                    return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                }
+                if($request->bio){
+                    $profile = WorkerProfile::whereUser_uuid($user->user_uuid)->first();
+                    if(is_null($profile)){
+                        $profile = new WorkerProfile;
+                        $profile->user_uuid = $user->user_uuid;
+                    }
+                    $profile->bio = $request->bio;
+                    $profile->gender_id = $request->gender_id;
+                    $profile->id_number = $request->id_number;
+                    $profile->worker_category_id = $request->worker_category_id;
+                    $profile->worker_sub_category_id = $request->worker_sub_category_id;
+                    $profile->licence_number = $request->licence_number;
+                    $profile->date_licence_renewal = $request->date_licence_renewal;
+                    $profile->qualification = $request->qualification;
+                    $profile->specialization = $request->specialization;
+                    $profile->residence = $request->residence;
+                    $profile->experience_years = $request->experience_years;
+                    $profile->profile_pic = $request->profile_pic;
+                    try {
+                        $profile->save();
+                    } catch (\Illuminate\Database\QueryException $e) {
+                        return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                    }
+                }
+                return response()->json($user);
+            }
         }
+       
    }
        
    /**

@@ -17,6 +17,7 @@ use App\Models\UserRequest;
 use App\Models\UserFavourite;
 use App\Models\UserRating;
 use App\Models\Facility;
+use App\Models\HospitalList;
 use App\User;
 use Auth;
 use DB;
@@ -46,6 +47,8 @@ class UserRequestController extends Controller
             $userRequest = UserRequest::whereRecepient_uuid(Auth::user()->user_uuid)->where(function ($query) {
                 $query->whereStatus_id(3)->orWhere('status_id', 4);
             })->with('requester', 'status')->orderBy('created_at', 'desc')->paginate(10);
+        } else if ($request->query('type') == 'hospitalList'){
+            $userRequest = HospitalList::whereRequester_uuid(Auth::user()->user_uuid)->with('recipient', 'healthWorkerProfile.workerCategory', 'healthWorkerProfile.workerSubCategory')->orderBy('created_at', 'asc')->get();
         }
 
         foreach($userRequest as $user){
@@ -177,7 +180,100 @@ class UserRequestController extends Controller
                 $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
                     cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
 
+                $workerRating = UserRating::whereWorker_uuid($user->user_uuid)->get();
+                $userRated = UserRating::whereClient_uuid(Auth::user()->user_uuid)->whereWorker_uuid($user->user_uuid)->first();
+                
+                if(count($workerRating) == 0){
+                    $user->setAttribute('rating', 0);
+                    $user->setAttribute('reviewers', 0);
+                }else{
+                    $rating = $workerRating->avg('rating');
+                    $user->setAttribute('rating', $rating);
+                    $user->setAttribute('reviewers', count($workerRating));
+                }
+
                 $user->setAttribute('distance', $angle * $earthRadius);
+            }
+        } else if ($request->query('type') == 'hospitalList'){
+            $rules = [
+                'location' => 'required',
+                'from' => 'required',
+                'to' => 'required',
+                'category' => 'required',
+                'workerId' => 'required',
+            ];
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json($validator, 422);
+            } else {
+                $recepient = User::whereId($request->workerId)->first();
+                $listCheck = HospitalList::whereRequester_uuid(Auth::user()->user_uuid)->whereRecepient_uuid($recepient->user_uuid)->first();
+                if(is_null($listCheck)){
+                    $userRequest = new HospitalList;
+                    $userRequest->requester_uuid = Auth::user()->user_uuid;
+                    $userRequest->recepient_uuid = $recepient->user_uuid;
+                    $userRequest->longitude = $request->location['lng'];
+                    $userRequest->latitude = $request->location['lat'];
+                    $userRequest->from = $request->from;
+                    $userRequest->to = $request->to;
+                    $userRequest->categiry_id = $request->category;          
+        
+                    try {
+                        $userRequest->save();
+                    } catch (\Illuminate\Database\QueryException $e) {
+                        return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                    }
+                }else{
+                    $userRequest = 'exists';
+                }
+                
+            }
+        } else if ($request->query('type') == 'hospitalComplete'){
+            $workers = HospitalList::whereRequester_uuid(Auth::user()->user_uuid)->get();
+            foreach($workers as $worker){
+                $userRequest = new UserRequest;
+                $userRequest->requester_uuid = Auth::user()->user_uuid;
+                $userRequest->recepient_uuid = $worker->recepient_uuid;
+                $userRequest->longitude = $worker->longitude;
+                $userRequest->latitude = $worker->latitude;
+                $userRequest->from = $worker->from;
+                $userRequest->to = $worker->to;
+                $userRequest->categiry_id = $worker->categiry_id;
+                $userRequest->status_id = 1;                
+    
+                try {
+                    $userRequest->save();
+                } catch (\Illuminate\Database\QueryException $e) {
+                    return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+                }
+
+                $user = auth('api')->user();
+                $recepient = User::whereUser_uuid($worker->recepient_uuid)->first();
+                $recipientModel = User::find($recepient->id);
+                $recipientModel->notify(new NewServiceRequest($user, $userRequest));
+                
+                $userDevice = UserDevice::whereUser_uuid($recepient->user_uuid)->first();
+                if(!is_null($userDevice)){
+                    $client = new Client(); //GuzzleHttp\Client
+                    $headers = [
+                        'Authorization' => 'key=AAAAYafBYz8:APA91bG42hm3weq_NaqP4AU-p_KCAhgHd4HkNpTlbvCKO1u6ePKHqCu7uZ1Cip0M_UVhxWQRcGU_bARCWsSDkYWkhNmQcNTtyNnZqJyo70HvGj3R6WRISUVAV0oKXHWJelT4HcSDhrbK',        
+                        'Content-Type'        => 'application/json',
+                    ];
+                    $notification = [
+                        "body" => Auth::user()->first_name." ".Auth::user()->last_name,
+                        "title" => "Individual Service Request"
+                    ];
+                    $response = $client->request('POST', 'https://fcm.googleapis.com/fcm/send', [
+                        'headers' => $headers,
+                        'json' => 
+                        [
+                            "to" => $userDevice->firebase_token,
+                            "collapse_key" => "type_a",
+                            "notification" => $notification
+                        ]
+                    ]);
+                }
+                $worker->delete();
             }
         } else if ($request->query('type') == 'complete'){
             $rules = [

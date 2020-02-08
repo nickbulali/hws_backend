@@ -18,6 +18,22 @@ class CreateHrhTables extends Migration
             $table->foreign('user_uuid')->references('user_uuid')->on('users');
         });
 
+        Schema::create('hospital_lists', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('requester_uuid');
+            $table->string('recepient_uuid');
+            $table->string('longitude');
+            $table->string('latitude');
+            $table->string('from');
+            $table->string('to');
+            $table->unsignedInteger('categiry_id');
+
+            $table->timestamps();
+
+            $table->foreign('requester_uuid')->references('user_uuid')->on('users');
+            $table->foreign('recepient_uuid')->references('user_uuid')->on('users');
+        });
+
         Schema::create('genders', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
