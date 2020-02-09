@@ -15,6 +15,10 @@ class UserRatingController extends Controller
         if ($request->query('search')) {
             $search = $request->query('search');
             $userRating = UserRating::where('name', 'LIKE', "%{$search}%")->get();
+        } else if ($request->query('type')=='comments'){
+            $user = User::whereId($request->query('user'))->first();
+            $userRating = UserRating::whereWorker_uuid($user->user_uuid)->with('client')->paginate(10);
+            //dd($user);
         } else {
             $userRating = UserRating::orderBy('name', 'DESC')->get();
         }
