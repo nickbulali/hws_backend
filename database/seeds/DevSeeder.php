@@ -15,6 +15,7 @@ class DevSeeder extends Seeder
         $individualRole = \App\Models\Role::find(3);
         $hospitalRole = \App\Models\Role::find(2);
         $workerRole = App\Models\Role::find(1);
+        $adminRole = App\Models\Role::find(4);
 
         \App\User::truncate();
         \App\Models\WorkerProfile::truncate();
@@ -50,6 +51,18 @@ class DevSeeder extends Seeder
             'active'=>1
         ]);
         $workerUser->attachRole($workerRole);
+
+          $adminRole= \App\User::create([
+            'user_uuid' => Str::uuid(),
+            'first_name' => 'Admin',
+            'last_name' => 'Account',
+            'email' => 'admin@hrh.local',
+            'phone_no' => '0712 345 678',
+            'password'=>'$2y$10$ClS05CwMFgK7dxtj4gma3OddLThoskmVJqMVTSX3KwMfMOzgIMpv2',
+            'active'=>1
+        ]);
+        $adminRole->attachRole($adminRole);
+
         \App\Models\WorkerProfile::create([
             'user_uuid' => $workerUser->user_uuid,
             'bio' => 'XX DD, MD, MPH, is the Robert P. Kelch, MD Research Professor of Pediatrics at the University of Nairobi Medical School and Professor at the Medical School and at the University of Nairobi School of Public Health. She serves as the Associate Chief Medical Information Officer for Pediatric Research at Nairobi Medicine and as Associate Chair for Health Metrics and Learning Health Systems for the Department of Pediatrics.',
