@@ -44,6 +44,14 @@ class CreateHrhTables extends Migration
             $table->string('name');
         });
 
+        Schema::create('worker_packages', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('worker_category_id');
+            $table->integer('amount');
+
+            $table->foreign('worker_category_id')->references('id')->on('worker_categories');
+        });
+
         Schema::create('worker_sub_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('worker_category_id');
@@ -67,6 +75,7 @@ class CreateHrhTables extends Migration
             $table->string('residence')->nullable();
             $table->string('experience_years')->nullable();
             $table->string('profile_pic')->nullable();
+            $table->string('verified')->default(0);
             $table->string('active')->default(1);
 
             $table->timestamps();
@@ -104,7 +113,9 @@ class CreateHrhTables extends Migration
             $table->string('recepient_uuid');
             $table->string('longitude');
             $table->string('latitude');
+            $table->string('from_date');
             $table->string('from');
+            $table->string('to_date');
             $table->string('to');
             $table->unsignedInteger('categiry_id');
             $table->unsignedInteger('status_id');
@@ -114,6 +125,19 @@ class CreateHrhTables extends Migration
             $table->foreign('requester_uuid')->references('user_uuid')->on('users');
             $table->foreign('recepient_uuid')->references('user_uuid')->on('users');
             $table->foreign('status_id')->references('id')->on('statuses');
+        });
+
+        Schema::create('user_requests_durations', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('start_time');
+            $table->string('end_time')->nullable();
+            $table->unsignedInteger('user_request_id');
+            $table->integer('bill')->nullable();
+            $table->integer('status')->default(0);
+
+            $table->timestamps();
+
+            $table->foreign('user_request_id')->references('id')->on('user_requests');
         });
 
         Schema::create('user_ratings', function (Blueprint $table) {

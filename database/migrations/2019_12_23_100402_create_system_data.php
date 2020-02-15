@@ -21,11 +21,29 @@ class CreateSystemData extends Migration
         \App\Models\Statuses::create(['name' => 'Active']);
         \App\Models\Statuses::create(['name' => 'Completed']);
         \App\Models\Statuses::create(['name' => 'Cancelled']);
+        \App\Models\Statuses::create(['name' => 'Started']);
 
         $doctor = \App\Models\WorkerCategory::create(['name' => 'Doctor']);
         $nurse = \App\Models\WorkerCategory::create(['name' => 'Nurse']);
         $clinicalOfficer = \App\Models\WorkerCategory::create(['name' => 'Clinical Officer (CO)']);
         $pharmacist = \App\Models\WorkerCategory::create(['name' => 'Pharmacist']);
+
+        \App\Models\WorkerPackage::create([
+            'worker_category_id' => $doctor->id,
+            'amount' => 2144
+        ]);
+        \App\Models\WorkerPackage::create([
+            'worker_category_id' => $nurse->id,
+            'amount' => 838
+        ]);
+        \App\Models\WorkerPackage::create([
+            'worker_category_id' => $clinicalOfficer->id,
+            'amount' => 506
+        ]);
+        \App\Models\WorkerPackage::create([
+            'worker_category_id' => $pharmacist->id,
+            'amount' => 1036
+        ]);
 
         \App\Models\WorkerSubCategory::create([
             'worker_category_id' => $doctor->id,

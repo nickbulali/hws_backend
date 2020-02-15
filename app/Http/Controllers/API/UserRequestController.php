@@ -11,6 +11,7 @@ use App\Notifications\AcceptServiceRequest;
 use App\Notifications\RejectServiceRequest;
 use App\Notifications\CompleteServiceRequest;
 use App\Notifications\CancelServiceRequest;
+use App\Notifications\ServiceRequestStarted;
 
 use App\Models\UserDevice;
 use App\Models\UserRequest;
@@ -18,9 +19,12 @@ use App\Models\UserFavourite;
 use App\Models\UserRating;
 use App\Models\Facility;
 use App\Models\HospitalList;
+use App\Models\UserRequestsDuration;
+use App\Models\WorkerPackage;
 use App\User;
 use Auth;
 use DB;
+use Carbon\Carbon;
 
 class UserRequestController extends Controller
 {
@@ -33,7 +37,7 @@ class UserRequestController extends Controller
     {
         if ($request->query('type') == 'individualUpcoming') {
             $userRequest = UserRequest::whereRequester_uuid(Auth::user()->user_uuid)->where(function ($query) {
-                $query->whereStatus_id(1)->orWhere('status_id', 2);
+                $query->whereStatus_id(1)->orWhere('status_id', 2)->orWhere('status_id', 5);
             })->with('recipient.healthWorkerProfile.workerCategory', 'recipient.healthWorkerProfile.workerSubCategory', 'status')->orderBy('created_at', 'desc')->paginate(10);
         } else if ($request->query('type') == 'individualHistorical'){
             $userRequest = UserRequest::whereRequester_uuid(Auth::user()->user_uuid)->where(function ($query) {
@@ -41,11 +45,15 @@ class UserRequestController extends Controller
             })->with('recipient.healthWorkerProfile.workerCategory', 'recipient.healthWorkerProfile.workerSubCategory', 'status')->orderBy('created_at', 'desc')->paginate(10);
         } else if ($request->query('type') == 'workerUpcoming'){
             $userRequest = UserRequest::whereRecepient_uuid(Auth::user()->user_uuid)->where(function ($query) {
-                $query->whereStatus_id(1)->orWhere('status_id', 2);
+                $query->whereStatus_id(1)->orWhere('status_id', 2)->orWhere('status_id', 5);
             })->with('requester', 'status')->orderBy('created_at', 'desc')->paginate(10);
         } else if ($request->query('type') == 'workerHistorical'){
             $userRequest = UserRequest::whereRecepient_uuid(Auth::user()->user_uuid)->where(function ($query) {
                 $query->whereStatus_id(3)->orWhere('status_id', 4);
+            })->with('requester', 'status')->orderBy('created_at', 'desc')->paginate(10);
+        } else if ($request->query('type') == 'workerStarted'){
+            $userRequest = UserRequest::whereRecepient_uuid(Auth::user()->user_uuid)->where(function ($query) {
+                $query->whereStatus_id(5);
             })->with('requester', 'status')->orderBy('created_at', 'desc')->paginate(10);
         } else if ($request->query('type') == 'hospitalList'){
             $userRequest = HospitalList::whereRequester_uuid(Auth::user()->user_uuid)->with('recipient', 'healthWorkerProfile.workerCategory', 'healthWorkerProfile.workerSubCategory')->orderBy('created_at', 'asc')->get();
@@ -91,6 +99,20 @@ class UserRequestController extends Controller
 
             $user->setAttribute('distance', $angle * $earthRadius);
             $user->setAttribute('workerLocation', [$userDevice->latitude, $userDevice->longitude]);
+
+            if($user->status_id == 5){
+                $userRequestsDuration = UserRequestsDuration::whereUser_request_id($user->id)->first();
+                $dt = Carbon::parse($userRequestsDuration->start_time); 
+                $user->setAttribute('total_duration', $dt->diffForHumans());
+            }
+
+            if($user->status_id == 3){
+                $userRequestsDuration = UserRequestsDuration::whereUser_request_id($user->id)->first();
+                $user->setAttribute('start_time', $userRequestsDuration->start_time);
+                $user->setAttribute('end_time', $userRequestsDuration->end_time);
+                $user->setAttribute('bill', $userRequestsDuration->bill);
+                $user->setAttribute('bill_status', $userRequestsDuration->status);
+            }
         }
 
         return response()->json($userRequest);
@@ -145,6 +167,10 @@ class UserRequestController extends Controller
                 }
 
                 $user->setAttribute('distance', $angle * $earthRadius);
+
+                $workerPackage= WorkerPackage::whereWorker_category_id($request->category)->first();
+                $user->setAttribute('rate', $workerPackage->amount);
+
             }
         } else if ($request->query('type') == 'filter') { 
             
@@ -294,6 +320,8 @@ class UserRequestController extends Controller
                 $userRequest->recepient_uuid = $recepient->user_uuid;
                 $userRequest->longitude = $request->location['lng'];
                 $userRequest->latitude = $request->location['lat'];
+                $userRequest->from_date = $request->dateFrom;
+                $userRequest->to_date = $request->dateTo;
                 $userRequest->from = $request->from;
                 $userRequest->to = $request->to;
                 $userRequest->categiry_id = $request->category;
@@ -367,6 +395,46 @@ class UserRequestController extends Controller
         } else if($request->type == 'complete'){
             $userRequest = UserRequest::whereId($id)->first();
             $userRequest->status_id = 3;
+
+            $userRequestsDurations = UserRequestsDuration::whereUser_request_id($id)->first();
+            $userRequestsDurations->end_time = Carbon::now();
+
+            try {
+                $userRequestsDurations->save();
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+
+            $started = Carbon::parse($userRequestsDurations->start_time);
+            $ended = Carbon::parse($userRequestsDurations->end_time);
+
+            $totalTime = $started->diffInMinutes($ended);
+            $totalTime = $totalTime/60;
+
+            $rate= WorkerPackage::whereWorker_category_id($userRequest->categiry_id)->first();
+            $userRequestsDurations->bill = $rate->amount * $totalTime;
+
+            try {
+                $userRequestsDurations->save();
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+
+
+        } else if($request->type == 'start'){
+            $userRequest = UserRequest::whereId($id)->first();
+            $userRequest->status_id = 5;
+
+            $userRequestsDurations = new UserRequestsDuration;
+            $userRequestsDurations->start_time = Carbon::now();
+            $userRequestsDurations->user_request_id = $id;
+            
+            try {
+                $userRequestsDurations->save();
+            } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+
         } else if($request->type == 'cancel'){
             $userRequest = UserRequest::whereId($id)->first();
             $userRequest->status_id = 4;
@@ -408,7 +476,19 @@ class UserRequestController extends Controller
                 "body" => Auth::user()->first_name." ".Auth::user()->last_name,
                 "title" => "Service Request Completed"
             ];
-        } else if($request->type == 'cancel'){
+        } else if($request->type == 'start'){
+            $user = auth('api')->user();
+            $requester = User::whereUser_uuid($userRequest->requester_uuid)->first();
+            $requesterModel = User::find($requester->id);
+            $requesterModel->notify(new ServiceRequestStarted($user, $userRequest));
+
+            $notification = [
+                "body" => Auth::user()->first_name." ".Auth::user()->last_name,
+                "title" => "Service Request Started"
+            ];
+        }
+        
+        else if($request->type == 'cancel'){
             $user = auth('api')->user();
             $requester = User::whereUser_uuid($userRequest->requester_uuid)->first();
             $requesterModel = User::find($requester->id);
