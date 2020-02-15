@@ -17,6 +17,7 @@ class CreatePermissionManagement extends Migration
         $healthWorkerRole = \App\Models\Role::create(['name' => 'Health Worker']);
         $hospitalRole = \App\Models\Role::create(['name' => 'Hospital']);
         $individualRole = \App\Models\Role::create(['name' => 'Private Individual']);
+        $adminRole  = \App\Models\Role::create(['name' => 'Admin']);
 
         $individualPermissions = [
             //request services
@@ -37,6 +38,12 @@ class CreatePermissionManagement extends Migration
             ['name' => 'health_worker_profile', 'display_name' => 'Can Setup Health Worker Profile'],
         ];
 
+        $adminPermissions = [
+            //manage
+            ['name' => 'manage', 'display_name' => 'Can Manage'],
+            //admin
+        ];
+
         foreach ($individualPermissions as $permission) {
             \App\Models\Permission::create($permission);
         }
@@ -44,6 +51,9 @@ class CreatePermissionManagement extends Migration
             \App\Models\Permission::create($permission);
         }
         foreach ($healthWorkerPermissions as $permission) {
+            \App\Models\Permission::create($permission);
+        }
+        foreach ($adminPermissions as $permission) {
             \App\Models\Permission::create($permission);
         }
 
@@ -61,6 +71,12 @@ class CreatePermissionManagement extends Migration
         //Assign all healthWorkerPermissions to role healthWorkerRole
         foreach ($healthWorkerPermissions as $permission) {
             $healthWorkerRole->attachPermission($permission);
+        }
+
+       $adminPermissions = \App\Models\Permission::whereId(7)->get();
+        //Assign all healthWorkerPermissions to role healthWorkerRole
+        foreach ($adminPermissions as $permission) {
+          $adminRole ->attachPermission($permission);
         }
 
 

@@ -12,7 +12,7 @@ class Facility extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'name', 'phone_number'
+        'user_id', 'name', 'type','level_id','license_number'
     ];
 
     public function user()

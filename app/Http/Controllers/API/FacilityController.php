@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\API;
 
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -35,10 +36,9 @@ class FacilityController extends Controller
             $Facility = new Facility;
             $Facility->user_id = $request->input('user_id');
             $Facility->name = $request->input('name');
-            $Facility->phone_number = $request->input('phone_number');
-            $Facility->address = $request->input('address');
-            $Facility->email = $request->input('email');
-            $Facility->postal_address = $request->input('postal_address');
+            $Facility->type = $request->input('type');
+            $Facility->level_id = $request->input('level_id');
+            $Facility->license_number = $request->input('license_number');
             
 
             try {
@@ -89,10 +89,9 @@ class FacilityController extends Controller
             $Facility = Facility::findOrFail($id);
             $Facility->user_id = $request->input('user_id');
             $Facility->name = $request->input('name');
-            $Facility->phone_number = $request->input('phone_number');
-            $Facility->address = $request->input('address');
-            $Facility->email = $request->input('email');
-            $Facility->postal_address = $request->input('postal_address');
+            $Facility->type = $request->input('type');
+            $Facility->level_id = $request->input('level_id');
+            $Facility->license_number = $request->input('license_number');
 
             try {
                 $Facility->save();

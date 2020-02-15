@@ -12,7 +12,7 @@ class WorkerProfile extends Model
      * @var array
      */
     protected $fillable = [
-        'user_uuid', 'bio', 'gender_id', 'id_number', 'worker_category_id', 'worker_sub_category_id', 'licence_number', 'date_licence_renewal', 'qualification', 'specialization', 'residence', 'experience_years', 'profile_pic'
+        'user_uuid', 'bio', 'gender_id', 'id_number', 'worker_category_id', 'worker_sub_category_id', 'licence_number', 'date_licence_renewal', 'qualification', 'specialization', 'residence', 'experience_years', 'profile_pic','status_id','verified'
     ];
 
     protected $hidden = [
@@ -27,5 +27,17 @@ class WorkerProfile extends Model
     public function workerSubCategory()
     {
         return $this->hasOne('App\Models\WorkerSubCategory', 'id', 'worker_sub_category_id');
+    }
+
+       
+    public function status()
+    {
+        return $this->hasOne('App\Models\Statuses', 'id', 'status_id');
+    }
+
+
+        public function users()
+    {
+        return $this->hasOne('App\User', 'user_uuid', 'user_uuid');
     }
 }

@@ -34,7 +34,7 @@ class UserController extends Controller
             $user->setAttribute('totalVisits', count($userRequest));
             $user->setAttribute('profile', $profile);
         } else {
-            $user= User::orderBy('name', 'DESC')->get();
+            $user= User::orderBy('id', 'DESC')->paginate(10);
         }
         return response()->json($user);
        

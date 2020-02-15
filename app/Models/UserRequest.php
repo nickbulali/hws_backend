@@ -37,4 +37,9 @@ class UserRequest extends Model
     {
         return $this->hasOne('App\Models\Statuses', 'id', 'status_id');
     }
+
+     public function category()
+    {
+        return $this->belongsTo('App\Models\WorkerCategory', 'categiry_id', 'id');
+    }
 }
