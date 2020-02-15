@@ -9,7 +9,7 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $role = Role::with('permissionRole')->get();
+        $role = Role::with('permissionRole')->where('id', '<',4)->get();
         return response()->json($role);
     }
     /**

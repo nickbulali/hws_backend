@@ -126,6 +126,16 @@ class AdminController extends Controller
         //
     }
 
+    public function rejected()
+    {
+
+
+        $rejected = UserRequest::where('status_id','=',4)->count();
+
+        return response()->json($rejected);
+        //
+    }
+
 
 
          public function complete()
@@ -206,6 +216,19 @@ class AdminController extends Controller
 
 
 
+      public function Workers(Request $request)
+  {
+    $Monthlyrequest = UserRequest::with('category')->select('categiry_id',
+            DB::raw('count(id) as Total'),
+            DB::raw("DATE_FORMAT(created_at,'%M %Y') as months"),
+            DB::raw("DATE_FORMAT(created_at,'%m') as monthKey")
+    )->groupBy('months','categiry_id', 'monthKey')->orderBy('months', 'ASC')->get();
+
+     return response()->json($Monthlyrequest);
+  }
+
+
+
  //Average User Ratings
  public function Average(Request $request)
  {
@@ -240,7 +263,28 @@ class AdminController extends Controller
       // SELECT , sum(quantity) as Total FROM `stock_order_request_issues` group by stock_order_product_id
      return response()->json($frequency);
     
+   }
+
+
+
+
+   public function verifyWorker($id){
+   
+   
+    try {
+           $verify = WorkerProfile::where('id_number','=',$id)->first();
+           $verify->verified=1;
+           $verify->save();
+              
+      return response()->json($verify);
+       } catch (\Illuminate\Database\QueryException $e) {
+           return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+       }
+                 
+   
+   
 }
+
 
     public function index()
     {
