@@ -24,6 +24,8 @@ class CreateHrhTables extends Migration
             $table->string('recepient_uuid');
             $table->string('longitude');
             $table->string('latitude');
+            $table->string('from_date');
+            $table->string('to_date');
             $table->string('from');
             $table->string('to');
             $table->unsignedInteger('categiry_id');

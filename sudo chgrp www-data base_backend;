@@ -2,3 +2,5 @@ sudo chgrp www-data hrh_frontend;
 sudo chown -R benja:www-data hrh_frontend/;
 sudo chmod -R 775 hrh_frontend/storage/;
 sudo chmod g+s hrh_frontend;
+
+ln -s /home2/healtdph/api/storage/app/pictures /home2/healtdph/public_html/api/pictures

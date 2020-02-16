@@ -219,10 +219,15 @@ class UserRequestController extends Controller
                 }
 
                 $user->setAttribute('distance', $angle * $earthRadius);
+
+                $workerPackage= WorkerPackage::whereWorker_category_id($request->category)->first();
+                $user->setAttribute('rate', $workerPackage->amount);
             }
         } else if ($request->query('type') == 'hospitalList'){
             $rules = [
                 'location' => 'required',
+                'dateFrom' => 'required',
+                'dateTo' => 'required',
                 'from' => 'required',
                 'to' => 'required',
                 'category' => 'required',
@@ -240,6 +245,8 @@ class UserRequestController extends Controller
                     $userRequest->recepient_uuid = $recepient->user_uuid;
                     $userRequest->longitude = $request->location['lng'];
                     $userRequest->latitude = $request->location['lat'];
+                    $userRequest->from_date = $request->dateFrom;
+                    $userRequest->to_date = $request->dateTo;
                     $userRequest->from = $request->from;
                     $userRequest->to = $request->to;
                     $userRequest->categiry_id = $request->category;          
@@ -262,6 +269,8 @@ class UserRequestController extends Controller
                 $userRequest->recepient_uuid = $worker->recepient_uuid;
                 $userRequest->longitude = $worker->longitude;
                 $userRequest->latitude = $worker->latitude;
+                $userRequest->from_date = $worker->from_date;
+                $userRequest->to_date = $worker->to_date;
                 $userRequest->from = $worker->from;
                 $userRequest->to = $worker->to;
                 $userRequest->categiry_id = $worker->categiry_id;

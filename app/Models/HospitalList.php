@@ -12,7 +12,7 @@ class HospitalList extends Model
      * @var array
      */
     protected $fillable = [
-        'requester_uuid', 'recepient_uuid', 'longitude', 'latitude', 'from', 'to', 'categiry_id', 'status_id'
+        'requester_uuid', 'recepient_uuid', 'longitude', 'latitude', 'from_date', 'to_date', 'from', 'to', 'categiry_id', 'status_id'
     ];
 
     protected $hidden = [
