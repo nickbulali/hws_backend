@@ -128,7 +128,7 @@ class UserRequestController extends Controller
     {
         if ($request->query('type') == 'new') {
             $userRequest = User::whereHas('healthWorkerProfile', function ($query) use ($request) {
-                $query->where('worker_category_id', $request->category)->whereActive(1);
+                $query->where('worker_category_id', $request->category)->whereActive(1)->whereVerified(1);
             })->whereHas('device', function ($query) use ($request) {
                 $query->select(DB::raw('*, ( 6367 * acos( cos( radians('.$request->location['lat'].') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('.$request->location['lng'].') ) + sin( radians('.$request->location['lat'].') ) * sin( radians( latitude ) ) ) ) AS distance'))
                 ->having('distance', '<', 50)
@@ -181,7 +181,7 @@ class UserRequestController extends Controller
                 if(!is_null($request->subGroup)){
                     $query->whereWorker_sub_category_id($request->subGroup);
                 }
-                $query->where('worker_category_id', $request->category);
+                $query->where('worker_category_id', $request->category)->whereActive(1)->whereVerified(1);
             })->whereHas('device', function ($query) use ($request) {
                 $query->select(DB::raw('*, ( 6367 * acos( cos( radians('.$request->location['lat'].') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('.$request->location['lng'].') ) + sin( radians('.$request->location['lat'].') ) * sin( radians( latitude ) ) ) ) AS distance'))
                 ->having('distance', '<', $request->distance)

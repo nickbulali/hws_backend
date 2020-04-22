@@ -76,6 +76,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Surgery',
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 10,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -108,6 +109,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Nursing',
             'residence' => 'Kisumu, Kenya',
             'experience_years' => 5,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -140,6 +142,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Nursing',
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 7,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -172,6 +175,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Nursing',
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 2,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -204,6 +208,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Nursing',
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 21,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -236,6 +241,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Nursing',
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 8,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -268,6 +274,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Nursing',
             'residence' => 'Narok, Kenya',
             'experience_years' => 2,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -300,6 +307,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Nursing',
             'residence' => 'Kisumu, Kenya',
             'experience_years' => 4,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -332,6 +340,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Nursing',
             'residence' => 'Garissa, Kenya',
             'experience_years' => 10,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -364,6 +373,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Anaesthetist',
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 15,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -396,6 +406,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Anaesthetist',
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 15,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -428,6 +439,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Anaesthetist',
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 10,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -460,6 +472,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Anaesthetist',
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 17,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -492,6 +505,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Anaesthetist',
             'residence' => 'Nairobi, Kenya',
             'experience_years' => 32,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -524,6 +538,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Nursing',
             'residence' => 'Kisumu, Kenya',
             'experience_years' => 5,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -556,6 +571,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Nursing',
             'residence' => 'Kisumu, Kenya',
             'experience_years' => 5,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -588,6 +604,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Nursing',
             'residence' => 'Kisumu, Kenya',
             'experience_years' => 5,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([
@@ -620,6 +637,7 @@ class DevSeeder extends Seeder
             'specialization' => 'Nursing',
             'residence' => 'Kisumu, Kenya',
             'experience_years' => 5,
+            'verified' => 1
 
         ]);
         \App\Models\UserDevice::create([

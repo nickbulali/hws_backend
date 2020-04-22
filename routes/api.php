@@ -40,7 +40,7 @@ Route::group([
 
 });
 
-Route::resource('role', 'API\RoleController');
+Route::resource('role', 'API\RoleController')->only('index');
   
 Route::middleware('auth:api')->group( function () {
 
@@ -68,7 +68,7 @@ Route::resource('permission', 'API\PermissionController');
 Route::get('permissionrole/attach', 'API\PermissionRoleController@attach');
 Route::get('permissionrole/detach', 'API\PermissionRoleController@detach');
 Route::get('permissionrole', 'API\PermissionRoleController@index');
-Route::resource('role', 'API\RoleController');
+Route::resource('role', 'API\RoleController')->except('index');
 Route::get('roleuser/attach', 'API\RoleUserController@attach');
 Route::get('roleuser/detach', 'API\RoleUserController@detach');
 Route::get('roleuser', 'API\RoleUserController@index');
