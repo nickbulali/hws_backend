@@ -57,7 +57,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'info@healthcarekonect.com'),
-        'name' => env('MAIL_FROM_NAME', 'Healthcare Connect'),
+        'name' => env('MAIL_FROM_NAME', 'Healthcare Workers Scheduler'),
     ],
 
     /*

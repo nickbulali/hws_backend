@@ -68,7 +68,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                Healthcare Connect API
+               Healthcare Workers Scheduler API
                 </div>
 
             </div>
